@@ -8,7 +8,7 @@ import {
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LogOut } from "lucide-react";
+import { IdCard, LogOut, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface ProfileData {
@@ -64,7 +64,7 @@ const Profile = () => {
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-      <div className="flex w-full max-w-md flex-col gap-6">
+      <div className="flex w-full max-w-lg flex-col gap-6">
         <Card className="shadow-lg">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">
@@ -74,11 +74,17 @@ const Profile = () => {
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <span className="font-medium min-w-20">Email:</span>
+                <span className="font-medium min-w-20 flex items-center gap-2">
+                  <Mail size={16} strokeWidth={2} aria-hidden="true" />
+                  Email:
+                </span>
                 <span className="text-muted-foreground">{data?.email}</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-medium min-w-20">ID:</span>
+                <span className="font-medium min-w-20 flex items-center gap-2">
+                  <IdCard size={18} strokeWidth={2} aria-hidden="true" />
+                  ID:
+                </span>
                 <span className="text-muted-foreground">{data?.id}</span>
               </div>
             </div>
