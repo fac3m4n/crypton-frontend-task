@@ -24,7 +24,7 @@ import { useState } from "react";
 import { toast, Toaster } from "sonner";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Mail, Lock } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -54,8 +54,8 @@ const LoginForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "testv@test.test",
+      password: "12345678",
     },
   });
 
@@ -78,7 +78,7 @@ const LoginForm = ({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Toaster position="top-right" richColors />
-      <Card>
+      <Card className="shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
@@ -95,7 +95,17 @@ const LoginForm = ({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="email@example.com" {...field} />
+                      <div className="relative">
+                        <Input
+                          className="peer ps-9"
+                          placeholder="Email"
+                          type="email"
+                          {...field}
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                          <Mail size={16} strokeWidth={2} aria-hidden="true" />
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,12 +118,17 @@ const LoginForm = ({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="********"
-                        {...field}
-                        type="password"
-                        autoComplete="current-password"
-                      />
+                      <div className="relative">
+                        <Input
+                          className="peer ps-9"
+                          placeholder="********"
+                          {...field}
+                          type="password"
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                          <Lock size={16} strokeWidth={2} aria-hidden="true" />
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

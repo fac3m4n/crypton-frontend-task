@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import api from "@/api";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { LoaderCircle } from "lucide-react";
+import { LoaderCircle, Mail, Lock } from "lucide-react";
 
 import { toast, Toaster } from "sonner";
 
@@ -88,7 +88,7 @@ const RegisterForm = ({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Toaster position="top-right" richColors />
 
-      <Card>
+      <Card className="shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome to Crypton</CardTitle>
           <CardDescription>
@@ -105,7 +105,17 @@ const RegisterForm = ({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="email@example.com" {...field} />
+                      <div className="relative">
+                        <Input
+                          className="peer ps-9"
+                          placeholder="email@example.com"
+                          type="email"
+                          {...field}
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                          <Mail size={16} strokeWidth={2} aria-hidden="true" />
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -118,12 +128,17 @@ const RegisterForm = ({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="********"
-                        {...field}
-                        type="password"
-                        disabled={isLoading}
-                      />
+                      <div className="relative">
+                        <Input
+                          className="peer ps-9"
+                          placeholder="********"
+                          {...field}
+                          type="password"
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                          <Lock size={16} strokeWidth={2} aria-hidden="true" />
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,12 +151,17 @@ const RegisterForm = ({
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="********"
-                        {...field}
-                        type="password"
-                        disabled={isLoading}
-                      />
+                      <div className="relative">
+                        <Input
+                          className="peer ps-9"
+                          placeholder="********"
+                          {...field}
+                          type="password"
+                        />
+                        <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                          <Lock size={16} strokeWidth={2} aria-hidden="true" />
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
