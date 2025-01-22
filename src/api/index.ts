@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://backend-ashen-seven-22.vercel.app",
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 api.interceptors.response.use(

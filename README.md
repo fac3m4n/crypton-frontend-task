@@ -65,6 +65,7 @@ pnpm run build
 
 ## Project Structure
 
+```
 src/
 ├── api/ # API configuration and instances
 ├── components/ # Reusable components
@@ -73,6 +74,7 @@ src/
 ├── lib/ # Utility functions
 ├── pages/ # Page components
 └── types/ # TypeScript type definitions
+```
 
 ## Features in Detail
 
