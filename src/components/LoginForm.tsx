@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -42,8 +48,11 @@ const LoginForm = ({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
-          <CardTitle>Welcome back!</CardTitle>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardDescription>
+            Enter your email and password to login
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -79,7 +88,15 @@ const LoginForm = ({
                   </FormItem>
                 )}
               />
-              <Button type="submit">Login</Button>
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+              <div className="text-center text-sm">
+                Don&apos;t have an account?{" "}
+                <a href="/register" className="underline underline-offset-4">
+                  Register
+                </a>
+              </div>
             </form>
           </Form>
         </CardContent>
