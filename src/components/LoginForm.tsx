@@ -20,6 +20,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { toast, Toaster } from "sonner";
+import api from "../api";
+import { useNavigate } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -30,10 +35,22 @@ const formSchema = z.object({
   }),
 });
 
+interface LoginResponse {
+  token: string;
+  type: string;
+}
+interface LoginError {
+  code: string;
+  message: string;
+}
+
 const LoginForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,11 +59,25 @@ const LoginForm = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    try {
+      const response = await api.post<LoginResponse>("/login", values);
+      localStorage.setItem("token", response.data.token);
+      navigate("/profile");
+    } catch (error) {
+      const err = error as { response?: { data: LoginError } };
+      const message = err.response?.data.message;
+      form.setError("root", { message });
+      console.error(err.response?.data);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Toaster position="top-right" richColors />
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
@@ -88,8 +119,20 @@ const LoginForm = ({
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <LoaderCircle
+                      className="-ms-1 me-2 animate-spin"
+                      size={16}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                    />
+                    <span>Logging in...</span>
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
