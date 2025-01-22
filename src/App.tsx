@@ -1,4 +1,4 @@
-import { Register, Login, Profile } from "@/pages";
+import { Register, Login, Profile, NotFound } from "@/pages";
 import {
   BrowserRouter,
   Routes,
@@ -35,6 +35,7 @@ function AnimatedTransitions() {
           path="/"
           element={<Navigate to={token ? "/profile" : "/login"} replace />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
   );
