@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import { ThemeToggle } from "../ThemeToggle";
 import { GalleryVerticalEnd } from "lucide-react";
 
+/**
+ * MainLayout Component
+ *
+ * Provides the main application layout including:
+ * - Fixed header with logo and theme toggle
+ * - Content area with proper spacing
+ */
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="bg-background relative">

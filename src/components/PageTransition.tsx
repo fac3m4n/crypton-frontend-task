@@ -4,6 +4,11 @@ interface PageTransitionProps {
   children: React.ReactNode;
 }
 
+/**
+ * PageTransition Component
+ *
+ * Provides a smooth transition for page content using Framer Motion.
+ */
 const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   return (
     <motion.div
