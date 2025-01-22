@@ -21,14 +21,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Invalid email address.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
+import api from "@/api";
+
+const formSchema = z
+  .object({
+    email: z.string().email({
+      message: "Invalid email address.",
+    }),
+    password: z.string().min(8, {
+      message: "Password must be at least 8 characters.",
+    }),
+    confirmPassword: z.string().min(8, {
+      message: "Password must be at least 8 characters.",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match.",
+  });
 const RegisterForm = ({
   className,
   ...props
@@ -38,10 +48,17 @@ const RegisterForm = ({
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    try {
+      const response = await api.post("/register", values);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -79,7 +96,23 @@ const RegisterForm = ({
                         placeholder="********"
                         {...field}
                         type="password"
-                        autoComplete="current-password"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="********"
+                        {...field}
+                        type="password"
                       />
                     </FormControl>
                     <FormMessage />
