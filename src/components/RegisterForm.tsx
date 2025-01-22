@@ -22,6 +22,11 @@ import {
 import { Input } from "@/components/ui/input";
 
 import api from "@/api";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
+
+import { toast, Toaster } from "sonner";
 
 const formSchema = z
   .object({
@@ -39,10 +44,22 @@ const formSchema = z
     path: ["confirmPassword"],
     message: "Passwords do not match.",
   });
+
+interface RegisterResponse {
+  token: string;
+  type: string;
+}
+interface RegisterError {
+  code: string;
+  message: string;
+}
 const RegisterForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -52,16 +69,25 @@ const RegisterForm = ({
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    setIsLoading(true);
     try {
-      const response = await api.post("/register", values);
-      console.log(response);
+      const response = await api.post<RegisterResponse>("/register", values);
+      localStorage.setItem("token", response.data.token);
+      navigate("/profile");
     } catch (error) {
-      console.error(error);
+      const err = error as { response?: { data: RegisterError } };
+      const message = err.response?.data.message;
+      form.setError("root", { message });
+      console.error(err.response?.data);
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
     }
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Toaster position="top-right" richColors />
+
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome to Crypton</CardTitle>
@@ -96,6 +122,7 @@ const RegisterForm = ({
                         placeholder="********"
                         {...field}
                         type="password"
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormMessage />
@@ -113,14 +140,27 @@ const RegisterForm = ({
                         placeholder="********"
                         {...field}
                         type="password"
+                        disabled={isLoading}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Register
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <LoaderCircle
+                      className="-ms-1 me-2 animate-spin"
+                      size={16}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                    />
+                    <span>Registering...</span>
+                  </>
+                ) : (
+                  "Register"
+                )}
               </Button>
               <div className="text-center text-sm">
                 Already have an account?{" "}
